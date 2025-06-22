@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validation";
 import { Link } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
+import { createUserAccount } from "@/lib/appwrite/api";
+import { toast } from "sonner";
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof SignUpValidation>>({
@@ -27,12 +28,13 @@ const SignUpForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignUpValidation>) {
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof SignUpValidation>) {
+    const newUser = await createUserAccount(values);
+
+    if (!newUser) return toast.error("Sign up failed. Please try again");
   }
 
-  const isUserLoading = true;
+  const isUserLoading = false;
 
   return (
     <Form {...form}>
