@@ -45,6 +45,9 @@ export async function saveUserToDB(userRecord: INewUserRecord) {
 
 export async function signInAccount(user: { email: string; password: string }) {
   try {
+    const currentSession = await account.getSession("current");
+    if (currentSession) return currentSession;
+
     const session = await account.createEmailPasswordSession(
       user.email,
       user.password
