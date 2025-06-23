@@ -15,11 +15,7 @@ import { SignUpValidation } from "@/lib/validation";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 import { toast } from "sonner";
-import {
-  useCreateUserAccount,
-  useSignInAccount,
-} from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/contexts/AuthContext";
+import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations";
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof SignUpValidation>>({
@@ -34,9 +30,6 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
     useCreateUserAccount();
-  const { mutateAsync: signInAccount, isPending: isSigningInUser } =
-    useSignInAccount();
-  const { checkAuthUser } = useUserContext();
 
   async function onSubmit(values: z.infer<typeof SignUpValidation>) {
     const newUser = await createUserAccount(values);
@@ -46,25 +39,8 @@ const SignUpForm = () => {
       return;
     }
 
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password,
-    });
-
-    if (!session) {
-      toast.error("Something went wrong. Please login to your new account");
-      return;
-    }
-
-    const isLoggedIn = await checkAuthUser();
-
-    if (isLoggedIn) {
-      form.reset();
-      navigate("/");
-    } else {
-      toast.error("Sign in failed. Please try again");
-      return;
-    }
+    form.reset();
+    navigate("/sign-in");
   }
 
   return (
