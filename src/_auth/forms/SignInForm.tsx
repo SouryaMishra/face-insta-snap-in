@@ -17,8 +17,10 @@ import Loader from "@/components/shared/Loader";
 import { toast } from "sonner";
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 const SignInForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof SignInValidation>>({
     resolver: zodResolver(SignInValidation),
     defaultValues: {
@@ -31,6 +33,10 @@ const SignInForm = () => {
   const { checkAuthUser } = useUserContext();
 
   async function onSubmit(values: z.infer<typeof SignInValidation>) {
+    if (isPending || isLoading) return;
+
+    setIsLoading(true);
+
     const session = await signInAccount({
       email: values.email,
       password: values.password,
@@ -38,6 +44,7 @@ const SignInForm = () => {
 
     if (!session) {
       toast.error("Something went wrong. Please login to your new account");
+      setIsLoading(false);
       return;
     }
 
@@ -48,7 +55,7 @@ const SignInForm = () => {
       navigate("/");
     } else {
       toast.error("Sign in failed. Please try again");
-      return;
+      setIsLoading(false);
     }
   }
 
@@ -92,8 +99,12 @@ const SignInForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary">
-            {isPending ? (
+          <Button
+            type="submit"
+            className="shad-button_primary"
+            disabled={isPending || isLoading}
+          >
+            {isPending || isLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
               </div>
