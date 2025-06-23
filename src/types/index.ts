@@ -21,3 +21,9 @@ export interface IUser {
   imageUrl: string;
   bio: string;
 }
+
+export interface INavLink {
+  imgURL: string;
+  route: string;
+  label: string;
+}
