@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/Form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { SignUpValidation } from "@/lib/validation";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
