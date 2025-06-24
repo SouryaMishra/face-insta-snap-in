@@ -27,3 +27,11 @@ export interface INavLink {
   route: string;
   label: string;
 }
+
+export interface INewPost {
+  userId: string;
+  caption: string;
+  file: File[];
+  location?: string;
+  tags?: string;
+}
