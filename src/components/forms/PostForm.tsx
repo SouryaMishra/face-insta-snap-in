@@ -18,14 +18,22 @@ import FileUploader from "../shared/FileUploader";
 import type { Models } from "appwrite";
 import { useUserContext } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import {
+  useCreatePost,
+  useUpdatePost,
+} from "@/lib/react-query/queriesAndMutations";
 
 interface IPostFormProps {
   post?: Models.Document;
+  action: "create" | "update";
 }
 
-const PostForm = ({ post }: IPostFormProps) => {
-  const { mutateAsync: createPost, isPending } = useCreatePost();
+const PostForm = ({ post, action }: IPostFormProps) => {
+  const { mutateAsync: createPost, isPending: isCreatePending } =
+    useCreatePost();
+  const { mutateAsync: updatePost, isPending: isUpdatePending } =
+    useUpdatePost();
+
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
@@ -39,7 +47,23 @@ const PostForm = ({ post }: IPostFormProps) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values: z.infer<typeof PostValidation>) => {
-    if (isPending) return;
+    if (isCreatePending || isUpdatePending) return;
+
+    if (post && action === "update") {
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post.imageId,
+        imageUrl: post.imageUrl,
+      });
+
+      if (!updatedPost) {
+        toast.error("Could not update post. Please try again later");
+        return;
+      }
+      navigate(`/posts/${post.$id}`);
+      return;
+    }
 
     const newPost = await createPost({
       ...values,
@@ -133,11 +157,11 @@ const PostForm = ({ post }: IPostFormProps) => {
             Cancel
           </Button>
           <Button
-            disabled={isPending}
+            disabled={isCreatePending || isUpdatePending}
             type="submit"
             className="shad-button_primary whitespace-nowrap"
           >
-            Post
+            {action === "create" ? "Post" : "Update"}
           </Button>
         </div>
       </form>

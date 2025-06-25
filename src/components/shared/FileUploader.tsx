@@ -9,8 +9,8 @@ interface IFileUploaderProps {
 }
 
 const FileUploader = ({ fieldChange, mediaUrl }: IFileUploaderProps) => {
-  const [file, setFile] = useState<File[]>([]);
-  const [fileUrl, setFileUrl] = useState<string>("");
+  const [file, setFile] = useState<File[]>([]); // Probably not required, check this
+  const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {

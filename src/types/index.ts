@@ -35,3 +35,13 @@ export interface INewPost {
   location?: string;
   tags?: string;
 }
+
+export interface IUpdatePost {
+  postId: string;
+  caption: string;
+  imageId: string;
+  imageUrl: string;
+  file: File[];
+  location?: string;
+  tags?: string;
+}
