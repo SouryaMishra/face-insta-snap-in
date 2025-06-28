@@ -55,6 +55,28 @@ export async function signInAccount(user: { email: string; password: string }) {
   }
 }
 
+export async function getUsers(limit?: number) {
+  const queries = [Query.orderDesc("$createdAt")];
+
+  if (limit != undefined) {
+    queries.push(Query.limit(limit));
+  }
+
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      queries
+    );
+
+    if (!users) throw Error;
+
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();

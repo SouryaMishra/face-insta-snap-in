@@ -19,6 +19,7 @@ import {
   deletePost,
   getInfinitePosts,
   searchPosts,
+  getUsers,
 } from "../appwrite/api";
 import type { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
@@ -182,4 +183,10 @@ export const useGetCurrentUser = () =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: getCurrentUser,
+  });
+
+export const useGetUsers = (limit?: number) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
   });
