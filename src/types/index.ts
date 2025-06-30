@@ -22,6 +22,15 @@ export interface IUser {
   bio: string;
 }
 
+export interface IUpdateUser {
+  userId: string;
+  name: string;
+  bio: string;
+  imageId: string;
+  imageUrl: string;
+  file: File[];
+}
+
 export interface INavLink {
   imgURL: string;
   route: string;
