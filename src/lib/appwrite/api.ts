@@ -4,12 +4,7 @@ import type { INewPost, INewUser, INewUserRecord, IUpdatePost } from "@/types";
 
 export async function createUserAccount(user: INewUser) {
   try {
-    const newAccount = await account.create(
-      ID.unique(),
-      user.email,
-      user.password,
-      user.name
-    );
+    const newAccount = await account.create(ID.unique(), user.email, user.password, user.name);
 
     if (!newAccount) throw Error;
 
@@ -45,10 +40,7 @@ export async function saveUserToDB(userRecord: INewUserRecord) {
 
 export async function signInAccount(user: { email: string; password: string }) {
   try {
-    const session = await account.createEmailPasswordSession(
-      user.email,
-      user.password
-    );
+    const session = await account.createEmailPasswordSession(user.email, user.password);
     return session;
   } catch (error) {
     console.error(error);
@@ -63,15 +55,23 @@ export async function getUsers(limit?: number) {
   }
 
   try {
-    const users = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      queries
-    );
+    const users = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.usersCollectionId, queries);
 
     if (!users) throw Error;
 
     return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(appwriteConfig.databaseId, appwriteConfig.usersCollectionId, userId);
+
+    if (!user) throw Error;
+
+    return user;
   } catch (error) {
     console.error(error);
   }
@@ -83,11 +83,9 @@ export async function getCurrentUser() {
 
     if (!currentAccount) throw Error;
 
-    const currentUser = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      [Query.equal("accountId", currentAccount.$id)]
-    );
+    const currentUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.usersCollectionId, [
+      Query.equal("accountId", currentAccount.$id),
+    ]);
 
     if (!currentUser) throw Error;
     return currentUser.documents[0];
@@ -151,11 +149,7 @@ export async function createPost(post: INewPost) {
 
 export async function uploadFile(file: File) {
   try {
-    const uploadedFile = await storage.createFile(
-      appwriteConfig.storageId,
-      ID.unique(),
-      file
-    );
+    const uploadedFile = await storage.createFile(appwriteConfig.storageId, ID.unique(), file);
     return uploadedFile;
   } catch (error) {
     console.error(error);
@@ -164,14 +158,7 @@ export async function uploadFile(file: File) {
 
 export function getFilePreview(fileId: string) {
   try {
-    const fileUrl = storage.getFilePreview(
-      appwriteConfig.storageId,
-      fileId,
-      2000,
-      2000,
-      ImageGravity.Top,
-      100
-    );
+    const fileUrl = storage.getFilePreview(appwriteConfig.storageId, fileId, 2000, 2000, ImageGravity.Top, 100);
 
     if (!fileUrl) throw Error;
 
@@ -193,11 +180,10 @@ export async function deleteFile(fileId: string) {
 
 export async function getRecentPosts() {
   try {
-    const posts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postsCollectionId,
-      [Query.orderDesc("$createdAt"), Query.limit(20)]
-    );
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.postsCollectionId, [
+      Query.orderDesc("$createdAt"),
+      Query.limit(20),
+    ]);
 
     if (!posts) throw Error;
 
@@ -215,11 +201,7 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   }
 
   try {
-    const posts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postsCollectionId,
-      queries
-    );
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.postsCollectionId, queries);
 
     if (!posts) throw Error;
 
@@ -231,11 +213,9 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
 
 export async function searchPosts(searchTerm: string) {
   try {
-    const posts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postsCollectionId,
-      [Query.search("caption", searchTerm)]
-    );
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.postsCollectionId, [
+      Query.search("caption", searchTerm),
+    ]);
 
     if (!posts) throw Error;
 
@@ -249,11 +229,7 @@ export async function getPostById(postId?: string) {
   if (!postId) throw Error;
 
   try {
-    const post = await databases.getDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.postsCollectionId,
-      postId
-    );
+    const post = await databases.getDocument(appwriteConfig.databaseId, appwriteConfig.postsCollectionId, postId);
 
     if (!post) throw Error;
 
