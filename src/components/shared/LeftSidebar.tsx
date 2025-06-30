@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, useLocation } from "react-router-dom";
 import type { INavLink } from "@/types";
 import { sidebarLinks } from "@/constants";
 import { Button } from "../ui/Button";
@@ -7,12 +7,13 @@ import { useUserContext } from "@/contexts/AuthContext";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 
 const LeftSidebar = () => {
-  const { mutateAsync: signOut, isSuccess } = useSignOutAccount();
-  const navigate = useNavigate();
+  const { mutateAsync: signOut, isPending, isSuccess } = useSignOutAccount();
   const { pathname } = useLocation();
   const { user } = useUserContext();
 
   const isLoading = false;
+
+  if (isSuccess) return <Navigate to="/sign-in" />;
 
   return (
     <nav className="leftsidebar">
@@ -59,7 +60,15 @@ const LeftSidebar = () => {
         </ul>
       </div>
 
-      <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
+      <Button
+        variant="ghost"
+        className="shad-button_ghost"
+        onClick={() => {
+          if (isPending) return;
+          signOut();
+        }}
+        disabled={isPending}
+      >
         <img src="/assets/icons/logout.svg" alt="logout" />
         <p className="small-medium lg:base-medium">Logout</p>
       </Button>
