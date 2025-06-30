@@ -18,12 +18,7 @@ const LeftSidebar = () => {
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
         <Link to="/" className="flex gap-3 items-center">
-          <img
-            src="/assets/images/logo.svg"
-            alt="logo"
-            width={170}
-            height={36}
-          />
+          <img src="/assets/images/logo.svg" alt="logo" width={170} height={36} />
         </Link>
 
         {isLoading || !user.email ? (
@@ -49,22 +44,12 @@ const LeftSidebar = () => {
             const isActive = pathname === link.route;
 
             return (
-              <li
-                key={link.label}
-                className={`leftsidebar-link group ${
-                  isActive && "bg-primary-500"
-                }`}
-              >
-                <NavLink
-                  to={link.route}
-                  className="flex gap-4 items-center p-4"
-                >
+              <li key={link.label} className={`leftsidebar-link group ${isActive && "bg-primary-500"}`}>
+                <NavLink to={link.route} className="flex gap-4 items-center p-4">
                   <img
                     src={link.imgURL}
                     alt={link.label}
-                    className={`group-hover:invert-white ${
-                      isActive && "invert-white"
-                    }`}
+                    className={`group-hover:invert-white ${isActive && "invert-white"}`}
                   />
                   {link.label}
                 </NavLink>
@@ -74,11 +59,7 @@ const LeftSidebar = () => {
         </ul>
       </div>
 
-      <Button
-        variant="ghost"
-        className="shad-button_ghost"
-        onClick={() => signOut()}
-      >
+      <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
         <img src="/assets/icons/logout.svg" alt="logout" />
         <p className="small-medium lg:base-medium">Logout</p>
       </Button>

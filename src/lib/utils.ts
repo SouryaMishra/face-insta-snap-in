@@ -50,5 +50,4 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
   }
 };
 
-export const checkIsLiked = (likeList: string[], userId: string) =>
-  likeList.includes(userId);
+export const checkIsLiked = (likeList: string[], userId: string) => likeList.includes(userId);

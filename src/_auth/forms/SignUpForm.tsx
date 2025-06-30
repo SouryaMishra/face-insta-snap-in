@@ -2,14 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/Button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/Form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/Form";
 import { Input } from "@/components/ui/Input";
 import { SignUpValidation } from "@/lib/validation";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,8 +21,7 @@ const SignUpForm = () => {
     },
   });
   const navigate = useNavigate();
-  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
-    useCreateUserAccount();
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
 
   async function onSubmit(values: z.infer<typeof SignUpValidation>) {
     const newUser = await createUserAccount(values);
@@ -47,16 +39,9 @@ const SignUpForm = () => {
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
         <img src="/assets/images/logo.svg" alt="Snapgram logo" />
-        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
-          Create a new account
-        </h2>
-        <p className="text-light-2 small-medium md:base-regular mt-2">
-          To use Snapgram, Please enter your details
-        </p>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 mt-4 w-full"
-        >
+        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
+        <p className="text-light-2 small-medium md:base-regular mt-2">To use Snapgram, Please enter your details</p>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 mt-4 w-full">
           <FormField
             control={form.control}
             name="name"
@@ -120,10 +105,7 @@ const SignUpForm = () => {
           </Button>
           <p className="text-small-regular text-light-2 text-center mt-2">
             Already have an account?
-            <Link
-              to="/sign-in"
-              className="text-primary-500 text-small-semibold ml-1"
-            >
+            <Link to="/sign-in" className="text-primary-500 text-small-semibold ml-1">
               Log in
             </Link>
           </p>

@@ -7,10 +7,7 @@ interface ISearchResultProps {
   searchedPosts: Models.DocumentList<Models.Document> | undefined;
 }
 
-const SearchResults = ({
-  isSearchFetching,
-  searchedPosts,
-}: ISearchResultProps) => {
+const SearchResults = ({ isSearchFetching, searchedPosts }: ISearchResultProps) => {
   if (isSearchFetching) {
     return <Loader />;
   }
@@ -19,9 +16,7 @@ const SearchResults = ({
     return <GridPostList posts={searchedPosts.documents} />;
   }
 
-  return (
-    <p className="text-light-4 mt-10 text-center w-full">No results found</p>
-  );
+  return <p className="text-light-4 mt-10 text-center w-full">No results found</p>;
 };
 
 export default SearchResults;
