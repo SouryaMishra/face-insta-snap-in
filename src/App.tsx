@@ -19,7 +19,7 @@ import { Toaster } from "@/components/ui/Sonner";
 
 function App() {
   return (
-    <main className="flex h-screen">
+    <main className="flex min-h-screen">
       <Routes>
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SignInForm />} />

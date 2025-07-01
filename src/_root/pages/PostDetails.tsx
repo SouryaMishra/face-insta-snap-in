@@ -54,20 +54,22 @@ const PostDetails = () => {
                 </div>
               </Link>
 
-              <div className="flex-center gap-4">
-                <Link to={`/update-post/${post.$id}`} className={`${user.id !== post.creator.$id && "hidden"}`}>
-                  <img src={"/assets/icons/edit.svg"} alt="edit" width={24} height={24} />
-                </Link>
+              {user.id === post.creator.$id && (
+                <div className="flex-center gap-4">
+                  <Link to={`/update-post/${post.$id}`}>
+                    <img src={"/assets/icons/edit.svg"} alt="edit" width={24} height={24} />
+                  </Link>
 
-                <Button
-                  disabled={isDeletePending}
-                  onClick={handleDeletePost}
-                  variant="ghost"
-                  className={`ost_details-delete_btn ${user.id !== post.creator.$id && "hidden"}`}
-                >
-                  <img src={"/assets/icons/delete.svg"} alt="delete" width={24} height={24} />
-                </Button>
-              </div>
+                  <Button
+                    disabled={isDeletePending}
+                    onClick={handleDeletePost}
+                    variant="ghost"
+                    className="ost_details-delete_btn"
+                  >
+                    <img src={"/assets/icons/delete.svg"} alt="delete" width={24} height={24} />
+                  </Button>
+                </div>
+              )}
             </div>
 
             <hr className="border w-full border-dark-4/80" />

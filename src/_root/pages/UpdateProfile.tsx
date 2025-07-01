@@ -16,7 +16,6 @@ import { z } from "zod";
 
 const UpdateProfile = () => {
   const { user, setUser } = useUserContext();
-  console.log(user);
   const { id } = useParams();
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
@@ -30,10 +29,10 @@ const UpdateProfile = () => {
   });
 
   useEffect(() => {
-    form.setValue("name", user.name);
+    form.setValue("name", user.name || "");
     form.setValue("username", user.username);
     form.setValue("email", user.email);
-    form.setValue("bio", user.bio);
+    form.setValue("bio", user.bio || "");
   }, [form, user]);
 
   const { data: currentUser } = useGetUserById(id || "");

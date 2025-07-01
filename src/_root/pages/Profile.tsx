@@ -53,22 +53,19 @@ const Profile = () => {
           </div>
 
           <div className="flex justify-center items-center gap-4">
-            <div className={`${user.id !== currentUser.$id && "hidden"}`}>
+            {user.id === currentUser.$id ? (
               <Link
                 to={`/update-profile/${currentUser.$id}`}
-                className={`min-h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
-                  user.id !== currentUser.$id && "hidden"
-                }`}
+                className="min-h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg"
               >
                 <img src={"/assets/icons/edit.svg"} alt="edit" width={20} height={20} />
                 <p className="flex whitespace-nowrap small-medium">Edit Profile</p>
               </Link>
-            </div>
-            <div className={`${user.id === id && "hidden"}`}>
+            ) : (
               <Button type="button" className="shad-button_primary px-8 min-h-12">
                 Follow
               </Button>
-            </div>
+            )}
           </div>
         </div>
       </div>

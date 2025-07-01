@@ -1,9 +1,11 @@
 import Loader from "@/components/shared/Loader";
 import UserCard from "@/components/shared/UserCard";
+import { useUserContext } from "@/contexts/AuthContext";
 import { useGetUsers } from "@/lib/react-query/queriesAndMutations";
 
 const AllUsers = () => {
   const { data: creators, isPending } = useGetUsers();
+  const { user } = useUserContext();
   return (
     <div className="common-container">
       <div className="user-container">
@@ -14,7 +16,7 @@ const AllUsers = () => {
           <ul className="user-grid">
             {creators?.documents.map((creator) => (
               <li key={creator?.$id} className="flex-1 min-w-[200px] w-full">
-                <UserCard user={creator} />
+                <UserCard user={creator} currentUserId={user.id} />
               </li>
             ))}
           </ul>
