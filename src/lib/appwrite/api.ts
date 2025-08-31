@@ -40,8 +40,8 @@ export async function saveUserToDB(userRecord: INewUserRecord) {
 
 export async function signInAccount(user: { email: string; password: string }) {
   try {
-   const session = await account.createEmailPasswordSession(user.email, user.password);
-   return session;
+    const session = await account.createEmailPasswordSession(user.email, user.password);
+    return session;
   } catch (error) {
     console.error(error);
   }
@@ -291,6 +291,23 @@ export async function getPostById(postId?: string) {
     if (!post) throw Error;
 
     return post;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getPostByIds(postIds?: string[]) {
+  if (!postIds) throw Error;
+  if (postIds.length === 0) throw Error;
+
+  try {
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.postsCollectionId, [
+      Query.equal("$id", postIds),
+    ]);
+
+    if (!posts) throw Error;
+
+    return posts;
   } catch (error) {
     console.error(error);
   }

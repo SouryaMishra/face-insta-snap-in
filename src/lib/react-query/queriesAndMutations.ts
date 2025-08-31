@@ -17,6 +17,7 @@ import {
   getUsers,
   getUserById,
   updateUser,
+  getPostByIds,
 } from "../appwrite/api";
 import type { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
@@ -60,6 +61,13 @@ export const useGetPostById = (postId?: string) =>
     queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
     queryFn: () => getPostById(postId),
     enabled: Boolean(postId),
+  });
+
+export const useGetPostByIds = (postIds?: string[]) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_POST_BY_IDS, ...(postIds || [])],
+    queryFn: () => getPostByIds(postIds),
+    enabled: Boolean(postIds),
   });
 
 export const useGetPosts = () =>
@@ -115,6 +123,9 @@ export const useLikePost = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_IDS, data?.$id],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
